@@ -38,9 +38,12 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: volume-claim
+  labels:
+    topic: volumes
+    provision: static
 spec:
-  # nodeSelector:
-  #   topology.kubernetes.io/zone: us-east-1d
+  nodeSelector:
+    topology.kubernetes.io/zone: us-east-1d
   containers:
     - name: nginx
       image: nginx
@@ -51,3 +54,18 @@ spec:
     - name: ebs-static-vol
       persistentVolumeClaim:
         claimName: ebs-static-claim
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: volume-claim-svc
+spec:
+  type: NodePort
+  selector:
+    topic: volumes
+    provision: static
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 32007
