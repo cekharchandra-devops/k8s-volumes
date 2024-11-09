@@ -39,8 +39,8 @@ kind: Pod
 metadata:
   name: volume-claim
 spec:
-  nodeSelector:
-    topology.kubernetes.io/zone: us-east-1d
+  # nodeSelector:
+  #   topology.kubernetes.io/zone: us-east-1d
   containers:
     - name: nginx
       image: nginx
