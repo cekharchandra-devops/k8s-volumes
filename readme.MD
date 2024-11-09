@@ -10,11 +10,17 @@ there are two different methods for creating and managing persistent storage (vo
 
 storage resources are manually created and configured by an administrator. These resources, known as PersistentVolumes (PVs), are created in advance and are available for Kubernetes to use when a workload requests storage. This approach can be more controlled, but it requires additional manual work and ongoing management.
 
-**How Static Provisioning Works**
+**Steps to create volume and cliam volume**
 
-* The administrator creates a PersistentVolume (PV) manually, specifying the details such as storage type (e.g., NFS, EBS, etc.), capacity, and access modes.
- 
-* Users then create a PersistentVolumeClaim (PVC), which requests a certain amount of storage.
-Kubernetes will attempt to match the PVC with an available PV that meets the claim's requirements (e.g., capacity, access mode).
-* Once matched, the PVC is bound to the PV, and the storage is available to the workload.
+* Create an EBS volume with the required storage size in the same availability zone as the worker node where the pod will cliam this volume.
+
+* install ebs csi driver to intergrate ebs volumes with kubenetes
+
+* add permissions to worker node's IAM Role to access volumes from k8s cluster
+
+* create PV, PVC resources to represent ebs volume inside the cluster and request the volume 
+
+* mount the volume in the required pods.
+
+
 
