@@ -10,7 +10,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   csi:
     driver: ebs.csi.aws.com
-    volumeHandle: vol-0bbc28d30247349f7
+    volumeHandle: vol-059039b6225c04eb6
     fsType: ext4
 ---
 apiVersion: v1
@@ -35,7 +35,7 @@ metadata:
     provisioner: static
 spec:
   nodeSelector:
-    topology.kubernetes.io/zone: us-east-1d
+    topology.kubernetes.io/zone: us-east-1a
   containers:
     - name: nginx
       image: nginx
