@@ -4,7 +4,7 @@ metadata:
   name: efs-static-pv
 spec:
   accessModes:
-    - ReadwriteOnce
+    - ReadWriteOnce
   capacity:
     storage: 5Gi
   persistentVolumeReclaimPolicy: Retain
@@ -21,7 +21,7 @@ metadata:
   name: efs-static-pvc
 spec:
   accessModes:
-    - ReadwriteOnce
+    - ReadWriteOnce
   volumeName: efs-static-pv
   resources:
     requests:
