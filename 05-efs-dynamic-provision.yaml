@@ -1,0 +1,68 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: efs-sc
+provisioner: efs.csi.aws.com
+reclaimPolicy: Retain
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: fs-022f2fbbdcd99e73c
+  directoryPerms: "700"
+  # gidRangeStart: "1000" # optional
+  # gidRangeEnd: "2000" # optional
+  basePath: "/expense" # optional
+  subPathPattern: "${.PVC.namespace}/${.PVC.name}" # optional
+  # ensureUniqueDirectory: "true" # optional
+  # reuseAccessPoint: "false" # optional
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: efs-dynamic-pvc
+spec:
+  storageClassName: "efs-sc"
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: efs-dynamic-pod
+  labels:
+    topic: volumes
+    provisioner: dynamic
+    type: efs
+spec:
+  # nodeSelector:
+  #   topology.kubernetes.io/zone: us-east-1a
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - name: efs-dynamic-vol
+          mountPath: /usr/share/nginx/html
+  volumes:
+    - name: efs-dynamic-vol
+      persistentVolumeClaim:
+        claimName:  efs-dynamic-pvc
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: efs-dynamic-svc
+  labels:
+    topic: volumes
+    provisioner: dynamic
+    type: efs
+spec:
+  type: LoadBalancer
+  selector:
+    topic: volumes
+    provisioner: dynamic
+  ports:
+    - port: 80
+      targetPort: 80
