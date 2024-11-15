@@ -42,12 +42,12 @@ spec:
     - name: nginx
       image: nginx
       volumeMounts:
-        - name: ebs-static-vol
+        - name: efs-static-vol
           mountPath: /usr/share/nginx/html
   volumes:
-    - name: ebs-static-vol
+    - name: efs-static-vol
       persistentVolumeClaim:
-        claimName:  ebs-static-pvc
+        claimName:  efs-static-pvc
 ---
 apiVersion: v1
 kind: Service
