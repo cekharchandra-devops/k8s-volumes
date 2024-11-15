@@ -1,33 +1,4 @@
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: efs-sc
-provisioner: efs.csi.aws.com
-reclaimPolicy: Retain
-parameters:
-  provisioningMode: efs-ap
-  fileSystemId: fs-022f2fbbdcd99e73c
-  directoryPerms: "700"
-  # gidRangeStart: "1000" # optional
-  # gidRangeEnd: "2000" # optional
-  basePath: "/expense" # optional
-  subPathPattern: "${.PVC.namespace}/${.PVC.name}" # optional
-  # ensureUniqueDirectory: "true" # optional
-  # reuseAccessPoint: "false" # optional
 
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: efs-dynamic-pvc
-spec:
-  storageClassName: "efs-sc"
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 3Gi
----
 apiVersion: v1
 kind: Pod
 metadata:
